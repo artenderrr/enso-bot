@@ -17,3 +17,6 @@ dmypy.json
 
 # Virtual environment
 .venv/
+
+# PostgreSQL directory
+db/

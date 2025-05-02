@@ -6,3 +6,7 @@ services:
                 - action: sync+restart
                   path: .
                   target: /enso-bot
+    db:
+        build: ./db
+        environment:
+            - POSTGRES_PASSWORD=postgres
