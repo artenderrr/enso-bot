@@ -3,6 +3,10 @@ from telebot.async_telebot import AsyncTeleBot
 from telebot.types import Message
 
 def register_command_handlers(bot: AsyncTeleBot) -> None:
+    @bot.message_handler(is_admin=True, commands=["start"]) # type: ignore[misc]
+    async def handle_start_command_for_admins(msg: Message) -> None:
+        await bot.send_message(msg.chat.id, "Hello, admin!")
+
     @bot.message_handler(commands=["start"]) # type: ignore[misc]
-    async def handle_start_command(msg: Message) -> None:
-        await bot.send_message(msg.chat.id, "Let's start!")
+    async def handle_start_command_for_users(msg: Message) -> None:
+        await bot.send_message(msg.chat.id, "Hello, user!")
