@@ -8,6 +8,7 @@ dependencies = [
     "aiohttp>=3.11.18",
     "pytelegrambotapi>=4.26.0",
     "python-dotenv>=1.1.0",
+    "redis>=6.0.0",
 ]
 
 [tool.mypy]
