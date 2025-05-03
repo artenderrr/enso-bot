@@ -10,3 +10,9 @@ def register_custom_filters(bot: AsyncTeleBot) -> None:
     custom_filters = (AdminFilter, StateFilter)
     for custom_filter in custom_filters:
         bot.add_custom_filter(custom_filter())
+
+def register_middlewares(bot: AsyncTeleBot) -> None:
+    from .middleware import UserSessionMiddleware
+    middlewares = (UserSessionMiddleware,)
+    for middleware in middlewares:
+        bot.setup_middleware(middleware())
