@@ -20,7 +20,7 @@ def register_command_handlers(bot: AsyncTeleBot) -> None:
             reply_markup=get_admin_markup()
         )
 
-    @bot.message_handler(commands=["start"]) # type: ignore[misc]
+    @bot.message_handler(is_admin=False, commands=["start"]) # type: ignore[misc]
     async def handle_start_command_for_users(msg: Message) -> None:
         await bot.send_message(
             msg.chat.id,
@@ -44,7 +44,7 @@ def register_command_handlers(bot: AsyncTeleBot) -> None:
             reply_markup=get_admin_markup()
         )
 
-    @bot.message_handler(commands=["cancel"]) # type: ignore[misc]
+    @bot.message_handler(is_admin=False, commands=["cancel"]) # type: ignore[misc]
     async def handle_cancel_command_success_for_users(
         msg: Message, data: dict[Any, Any]
     ) -> None:
@@ -55,7 +55,7 @@ def register_command_handlers(bot: AsyncTeleBot) -> None:
             reply_markup=get_user_markup()
         )
 
-    @bot.message_handler(is_admin=True, commands=["debug"]) # type: ignore[misc]
+    @bot.message_handler(commands=["debug"]) # type: ignore[misc]
     async def handle_debug_command(msg: Message, data: dict[Any, Any]) -> None:
         user_id = msg.from_user.id
         state = await data["session"].get_state()
