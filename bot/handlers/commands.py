@@ -6,7 +6,8 @@ from .utils.markup import get_admin_markup, get_user_markup
 from .replies import (
     START_CMD_REPLY,
     CANCEL_CMD_REPLY_FAILURE,
-    CANCEL_CMD_REPLY_SUCCESS
+    CANCEL_CMD_REPLY_SUCCESS,
+    get_debug_cmd_reply
 )
 
 def register_command_handlers(bot: AsyncTeleBot) -> None:
@@ -52,4 +53,20 @@ def register_command_handlers(bot: AsyncTeleBot) -> None:
             msg,
             CANCEL_CMD_REPLY_SUCCESS,
             reply_markup=get_user_markup()
+        )
+
+    @bot.message_handler(is_admin=True, commands=["debug"]) # type: ignore[misc]
+    async def handle_debug_command(msg: Message, data: dict[Any, Any]) -> None:
+        user_id = msg.from_user.id
+        state = await data["session"].get_state()
+        context = await data["session"].get_context()
+        debug_cmd_reply = get_debug_cmd_reply({
+            "User ID": user_id,
+            "State": state,
+            "Context": context
+        })
+        await bot.reply_to(
+            msg,
+            debug_cmd_reply,
+            parse_mode="MarkdownV2"
         )

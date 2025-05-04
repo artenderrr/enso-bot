@@ -1,3 +1,5 @@
+from typing import Any
+
 START_CMD_REPLY = (
     "SUp\\! Я ЕНСИК :S"
     "\n\n"
@@ -11,5 +13,10 @@ START_CMD_REPLY = (
     "Вопросы/cвязь: @ensosupport"
 )
 
-CANCEL_CMD_REPLY_FAILURE = "Сейчас нет активной операции, которую можно было бы отменить."
+CANCEL_CMD_REPLY_FAILURE = (
+    "Сейчас нет активной операции, которую можно было бы отменить."
+)
 CANCEL_CMD_REPLY_SUCCESS = "Операция была отменена."
+
+def get_debug_cmd_reply(debug_data: dict[str, Any]) -> str:
+    return "\n".join(f"*{k}*: `{v}`" for k, v in debug_data.items())
