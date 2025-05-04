@@ -6,8 +6,9 @@ from .storage import get_redis
 __all__ = ["config", "get_redis"]
 
 def register_custom_filters(bot: AsyncTeleBot) -> None:
+    from telebot.asyncio_filters import TextMatchFilter
     from .custom_filters import AdminFilter, StateFilter
-    custom_filters = (AdminFilter, StateFilter)
+    custom_filters = (AdminFilter, StateFilter, TextMatchFilter)
     for custom_filter in custom_filters:
         bot.add_custom_filter(custom_filter())
 
