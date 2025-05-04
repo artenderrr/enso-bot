@@ -19,3 +19,17 @@ ADD_ITEM_MSG_VOLUME_FAILURE = (
     "длиной не более 64 цифр\\."
 )
 ADD_ITEM_MSG_VOLUME_SUCCESS = "Отправьте изображение вещи\\."
+
+ADD_ITEM_MSG_IMAGE_FAILURE = "Отправьте изображение, а не что\\-либо другое\\."
+
+
+def get_add_item_msg_image_success(
+    item_name: str, item_collection: str, item_volume: int
+) -> str:
+    return (
+        "Вещь была успешно добавлена\\!\n"
+        "\n"
+        f"\\- Наименование вещи: *{item_name}*\n"
+        f"\\- Коллекция: *{item_collection}*\n"
+        f"\\- Тираж: *{item_volume} шт\\.*"
+    )
