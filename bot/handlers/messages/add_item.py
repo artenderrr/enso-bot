@@ -10,6 +10,7 @@ from ..replies import (
 def register_add_item_handlers(bot: AsyncTeleBot) -> None:
     @bot.message_handler(is_admin=True, state="default", text="Добавить вещь") # type: ignore[misc]
     async def handle_add_item_start_for_admins(msg: Message, data: dict[Any, Any]) -> None:
+        await data["session"].clear_session()
         await data["session"].set_state("add_item:name")
         await bot.send_message(msg.chat.id, ADD_ITEM_MSG_START_SUCCESS)
 
