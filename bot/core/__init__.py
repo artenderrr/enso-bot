@@ -1,9 +1,9 @@
 # mypy: disable-error-code="import-untyped"
 from telebot.async_telebot import AsyncTeleBot
 from .config import bot_config as config
-from .storage import get_redis
+from .storage import get_redis, init_pg, get_pg_pool
 
-__all__ = ["config", "get_redis"]
+__all__ = ["config", "get_redis", "init_pg", "get_pg_pool"]
 
 def register_custom_filters(bot: AsyncTeleBot) -> None:
     from telebot.asyncio_filters import TextMatchFilter
