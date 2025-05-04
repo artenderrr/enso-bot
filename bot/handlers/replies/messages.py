@@ -13,3 +13,9 @@ ADD_ITEM_MSG_COLLECTION_FAILURE = (
     "длиной не более 64 символов\\."
 )
 ADD_ITEM_MSG_COLLECTION_SUCCESS = "Введите объем тиража в виде целого числа\\."
+
+ADD_ITEM_MSG_VOLUME_FAILURE = (
+    "Объем тиража должен быть указан как целое число без дополнительных символов "
+    "длиной не более 64 цифр\\."
+)
+ADD_ITEM_MSG_VOLUME_SUCCESS = "Отправьте изображение вещи\\."

@@ -9,7 +9,9 @@ from ..replies import (
     ADD_ITEM_MSG_NAME_FAILURE,
     ADD_ITEM_MSG_NAME_SUCCESS,
     ADD_ITEM_MSG_COLLECTION_FAILURE,
-    ADD_ITEM_MSG_COLLECTION_SUCCESS
+    ADD_ITEM_MSG_COLLECTION_SUCCESS,
+    ADD_ITEM_MSG_VOLUME_FAILURE,
+    ADD_ITEM_MSG_VOLUME_SUCCESS
 )
 
 def register_add_item_handlers(bot: AsyncTeleBot) -> None:
@@ -63,4 +65,24 @@ def register_add_item_handlers(bot: AsyncTeleBot) -> None:
             await data["session"].set_state("add_item:volume")
             await bot.send_message(
                 msg.chat.id, ADD_ITEM_MSG_COLLECTION_SUCCESS, parse_mode="MarkdownV2"
+            )
+
+    @bot.message_handler(
+        is_admin=True,
+        state="add_item:volume",
+        content_types=content_type_media,
+        func=lambda msg: True
+    ) # type: ignore[misc]
+    async def handle_add_item_volume(msg: Message, data: dict[Any, Any]) -> None:
+        if msg.content_type != "text" or not msg.text.isdigit() or len(msg.text) > 64:
+            await bot.reply_to(
+                msg, ADD_ITEM_MSG_VOLUME_FAILURE, parse_mode="MarkdownV2"
+            )
+        else:
+            await data["session"].update_context(
+                {"item_volume": int(msg.text)}
+            )
+            await data["session"].set_state("add_item:image")
+            await bot.send_message(
+                msg.chat.id, ADD_ITEM_MSG_VOLUME_SUCCESS, parse_mode="MarkdownV2"
             )
