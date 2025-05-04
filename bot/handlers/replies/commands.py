@@ -10,3 +10,6 @@ START_CMD_REPLY = (
     "\n\n"
     "Вопросы/cвязь: @ensosupport"
 )
+
+CANCEL_CMD_REPLY_FAILURE = "Сейчас нет активной операции, которую можно было бы отменить."
+CANCEL_CMD_REPLY_SUCCESS = "Операция была отменена."

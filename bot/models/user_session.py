@@ -46,3 +46,7 @@ class UserSession:
         await self.redis.delete(
             f"user:{self.user_id}:context"
         )
+
+    async def clear_session(self) -> None:
+        await self.clear_state()
+        await self.clear_context()
