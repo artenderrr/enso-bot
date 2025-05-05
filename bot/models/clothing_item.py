@@ -56,10 +56,14 @@ class ClothingItem:
     @classmethod
     async def get(cls, item_id: int) -> ClothingItem | None:
         async with get_pg_pool().acquire() as conn:
-            item_data = await conn.fetchrow(
+            item_row = await conn.fetchrow(
                 "SELECT * FROM items WHERE id = $1", item_id
             )
-        return cls(**item_data) if item_data else None
+        if item_row:
+            item_data = dict(item_row)
+            item_data["image_path"] = Path(item_data["image_path"])
+            return cls(**item_data)
+        return None
 
     async def delete(self) -> None:
         async with get_pg_pool().acquire() as conn:
