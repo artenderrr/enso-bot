@@ -66,3 +66,10 @@ class ClothingItem:
                 "SELECT * FROM items WHERE id = $1", item_id
             )
         return cls(**item_data) if item_data else None
+
+    async def delete(self) -> None:
+        async with get_pg_pool().acquire() as conn:
+            await conn.execute(
+                "DELETE FROM items WHERE id = $1", self.id
+            )
+        self.image_path.unlink(missing_ok=True)
