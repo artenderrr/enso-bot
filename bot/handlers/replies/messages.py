@@ -32,5 +32,5 @@ def get_add_item_msg_image_success(
         f"• ID: *{item_id}*\n"
         f"• Наименование: *{item_name}*\n"
         f"• Коллекция: *{item_collection}*\n"
-        f"• Тираж: *{item_volume} шт\\.*"
+        f"• Тираж: *{item_volume:,} шт\\.*"
     )

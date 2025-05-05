@@ -1,3 +1,4 @@
+# mypy: disable-error-code="import-untyped"
 from __future__ import annotations
 from typing import ClassVar, cast
 from uuid import uuid4
