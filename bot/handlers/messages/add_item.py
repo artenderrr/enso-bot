@@ -79,7 +79,7 @@ def register_add_item_handlers(bot: AsyncTeleBot) -> None:
         func=lambda msg: True
     ) # type: ignore[misc]
     async def handle_add_item_volume(msg: Message, data: dict[Any, Any]) -> None:
-        if msg.content_type != "text" or not msg.text.isdigit() or len(msg.text) > 64:
+        if msg.content_type != "text" or not msg.text.isdigit() or len(msg.text) > 9:
             await bot.reply_to(
                 msg, ADD_ITEM_MSG_VOLUME_FAILURE, parse_mode="MarkdownV2"
             )
