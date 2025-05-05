@@ -3,6 +3,7 @@ from typing import ClassVar, cast
 from uuid import uuid4
 from pathlib import Path
 from dataclasses import dataclass
+import aiofiles
 from core import get_pg_pool
 
 @dataclass
@@ -16,10 +17,11 @@ class ClothingItem:
     image_path: Path
 
     @classmethod
-    def _save_item_image(cls, image_bytes: bytes, image_extension: str) -> Path:
+    async def _save_item_image(cls, image_bytes: bytes, image_extension: str) -> Path:
         cls._images_dir.mkdir(parents=True, exist_ok=True)
         image_path = cls._images_dir / f"{uuid4()}{image_extension}"
-        image_path.write_bytes(image_bytes)
+        async with aiofiles.open(image_path, "wb") as file:
+            await file.write(image_bytes)
         return image_path
 
     @classmethod
@@ -48,7 +50,7 @@ class ClothingItem:
     ) -> ClothingItem:
         image_path = None
         try:
-            image_path = cls._save_item_image(image_bytes, image_extension)
+            image_path = await cls._save_item_image(image_bytes, image_extension)
             item_id = await cls._save_in_database(name, collection, volume, image_path)
         except Exception:
             if image_path and image_path.exists():
