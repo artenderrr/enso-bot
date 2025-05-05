@@ -1,8 +1,9 @@
 # mypy: disable-error-code="import-untyped"
 from typing import Any
+import random
 from pathlib import Path
 from telebot.async_telebot import AsyncTeleBot
-from telebot.types import Message
+from telebot.types import Message, ReactionTypeEmoji
 from telebot.util import content_type_media
 from models import ClothingItem
 from ..replies import (
@@ -15,7 +16,8 @@ from ..replies import (
     ADD_ITEM_MSG_VOLUME_FAILURE,
     ADD_ITEM_MSG_VOLUME_SUCCESS,
     ADD_ITEM_MSG_IMAGE_FAILURE,
-    get_add_item_msg_image_success
+    get_add_item_msg_image_success,
+    REACTION_EMOJIS
 )
 from ..utils.markup import get_admin_markup
 
@@ -104,6 +106,13 @@ def register_add_item_handlers(bot: AsyncTeleBot) -> None:
                 msg, ADD_ITEM_MSG_IMAGE_FAILURE, parse_mode="MarkdownV2"
             )
         else:
+            await bot.set_message_reaction(
+                msg.chat.id,
+                msg.id,
+                [ReactionTypeEmoji(random.choice(REACTION_EMOJIS))],
+                is_big=False
+            )
+        
             context = await data["session"].get_context()
             image = await bot.get_file(file_id=msg.photo[-1].file_id)
             image_extension = Path(image.file_path).suffix

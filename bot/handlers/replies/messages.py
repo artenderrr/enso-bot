@@ -34,3 +34,5 @@ def get_add_item_msg_image_success(
         f"• Коллекция: *{item_collection}*\n"
         f"• Тираж: *{item_volume:,} шт\\.*"
     )
+
+REACTION_EMOJIS = ["\U0001F525", "\U0001F60E"]
