@@ -58,3 +58,11 @@ class ClothingItem:
                 image_path.unlink(missing_ok=True)
             raise
         return cls(item_id, name, collection, volume, image_path)
+
+    @classmethod
+    async def get(cls, item_id: int) -> ClothingItem | None:
+        async with get_pg_pool().acquire() as conn:
+            item_data = await conn.fetchrow(
+                "SELECT * FROM items WHERE id = $1", item_id
+            )
+        return cls(**item_data) if item_data else None
