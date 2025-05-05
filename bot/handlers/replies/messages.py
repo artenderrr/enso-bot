@@ -24,12 +24,13 @@ ADD_ITEM_MSG_IMAGE_FAILURE = "Отправьте изображение, а не
 
 
 def get_add_item_msg_image_success(
-    item_name: str, item_collection: str, item_volume: int
+    item_id: int, item_name: str, item_collection: str, item_volume: int
 ) -> str:
     return (
         "Вещь была успешно добавлена\\!\n"
         "\n"
-        f"\\- Наименование вещи: *{item_name}*\n"
-        f"\\- Коллекция: *{item_collection}*\n"
-        f"\\- Тираж: *{item_volume} шт\\.*"
+        f"• ID: *{item_id}*\n"
+        f"• Наименование: *{item_name}*\n"
+        f"• Коллекция: *{item_collection}*\n"
+        f"• Тираж: *{item_volume} шт\\.*"
     )

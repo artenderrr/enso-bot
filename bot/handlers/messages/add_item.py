@@ -109,7 +109,7 @@ def register_add_item_handlers(bot: AsyncTeleBot) -> None:
             image_extension = Path(image.file_path).suffix
             image_bytes = await bot.download_file(image.file_path)
             
-            await ClothingItem.create(
+            item = await ClothingItem.create(
                 name=context["item_name"],
                 collection=context["item_collection"],
                 volume=context["item_volume"],
@@ -123,9 +123,10 @@ def register_add_item_handlers(bot: AsyncTeleBot) -> None:
                 msg.chat.id,
                 image_bytes,
                 get_add_item_msg_image_success(
-                    context["item_name"],
-                    context["item_collection"],
-                    context["item_volume"]
+                    item.id,
+                    item.name,
+                    item.collection,
+                    item.volume
                 ),
                 parse_mode="MarkdownV2",
                 reply_markup=get_admin_markup()
