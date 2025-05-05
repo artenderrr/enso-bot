@@ -7,7 +7,6 @@ from telebot.types import Message, ReactionTypeEmoji
 from telebot.util import content_type_media
 from models import ClothingItem
 from ..replies import (
-    REJECT_MSG,
     ADD_ITEM_MSG_START_SUCCESS,
     ADD_ITEM_MSG_NAME_FAILURE,
     ADD_ITEM_MSG_NAME_SUCCESS,
@@ -29,10 +28,6 @@ def register_add_item_handlers(bot: AsyncTeleBot) -> None:
         await bot.send_message(
             msg.chat.id, ADD_ITEM_MSG_START_SUCCESS, parse_mode="MarkdownV2"
         )
-
-    @bot.message_handler(is_admin=False, state="default", text="Добавить вещь") # type: ignore[misc]
-    async def handle_add_item_start_for_users(msg: Message) -> None:
-        await bot.send_message(msg.chat.id, REJECT_MSG)
 
     @bot.message_handler(
         is_admin=True,
