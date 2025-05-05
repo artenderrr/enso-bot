@@ -49,14 +49,8 @@ class ClothingItem:
         image_bytes: bytes,
         image_extension: str
     ) -> ClothingItem:
-        image_path = None
-        try:
-            image_path = await cls._save_item_image(image_bytes, image_extension)
-            item_id = await cls._save_in_database(name, collection, volume, image_path)
-        except Exception:
-            if image_path and image_path.exists():
-                image_path.unlink(missing_ok=True)
-            raise
+        image_path = await cls._save_item_image(image_bytes, image_extension)
+        item_id = await cls._save_in_database(name, collection, volume, image_path)
         return cls(item_id, name, collection, volume, image_path)
 
     @classmethod
