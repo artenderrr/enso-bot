@@ -40,3 +40,8 @@ def get_add_item_msg_image_success(
 # del_item replies
 
 DEL_ITEM_MSG_START_SUCCESS = "Введите ID вещи, которую вы хотите удалить\\."
+DEL_ITEM_MSG_ID_FORMAT_FAILURE = "ID должен быть указан как целое число без дополнительных символов\\."
+DEL_ITEM_MSG_ID_LOOKUP_FAILURE = "Вещь с указанным ID не найдена\\. Может, это опечатка?"
+
+def get_del_item_msg_id_success(item_name: str) -> str:
+    return f"Вещь *{item_name}* была успешно удалена\\!"

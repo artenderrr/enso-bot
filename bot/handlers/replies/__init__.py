@@ -17,7 +17,10 @@ from .messages import (
     ADD_ITEM_MSG_VOLUME_SUCCESS,
     ADD_ITEM_MSG_IMAGE_FAILURE,
     get_add_item_msg_image_success,
-    DEL_ITEM_MSG_START_SUCCESS
+    DEL_ITEM_MSG_START_SUCCESS,
+    DEL_ITEM_MSG_ID_FORMAT_FAILURE,
+    DEL_ITEM_MSG_ID_LOOKUP_FAILURE,
+    get_del_item_msg_id_success
 )
 
 __all__ = [
@@ -36,5 +39,8 @@ __all__ = [
     "ADD_ITEM_MSG_VOLUME_SUCCESS",
     "ADD_ITEM_MSG_IMAGE_FAILURE",
     "get_add_item_msg_image_success",
-    "DEL_ITEM_MSG_START_SUCCESS"
+    "DEL_ITEM_MSG_START_SUCCESS",
+    "DEL_ITEM_MSG_ID_FORMAT_FAILURE",
+    "DEL_ITEM_MSG_ID_LOOKUP_FAILURE",
+    "get_del_item_msg_id_success"
 ]
