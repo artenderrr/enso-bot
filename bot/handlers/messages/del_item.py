@@ -14,7 +14,7 @@ from ..utils.markup import get_admin_markup
 
 def register_del_item_handlers(bot: AsyncTeleBot) -> None:
     @bot.message_handler(is_admin=True, state="default", text="Удалить вещь") # type: ignore[misc]
-    async def handle_del_item_start_for_admins(msg: Message, data: dict[Any, Any]) -> None:
+    async def handle_del_item_start(msg: Message, data: dict[Any, Any]) -> None:
         await data["session"].clear_session()
         await data["session"].set_state("del_item:id")
         await bot.send_message(
