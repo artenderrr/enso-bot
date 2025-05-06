@@ -1,6 +1,7 @@
 # mypy: disable-error-code="import-untyped"
 from __future__ import annotations
 from typing import Any, ClassVar, cast
+import json
 from uuid import uuid4
 from pathlib import Path
 from dataclasses import dataclass
@@ -77,6 +78,12 @@ class ClothingItem:
             item_rows = await conn.fetch("SELECT * FROM items")
         items_data = [ClothingItem._parse_row_data(row) for row in item_rows]
         return [cls(**item_data) for item_data in items_data]
+
+    @property
+    def json(self) -> str:
+        item_data = self.__dict__
+        item_data["image_path"] = str(item_data["image_path"])
+        return json.dumps(item_data)
 
     async def delete(self) -> None:
         async with get_pg_pool().acquire() as conn:
