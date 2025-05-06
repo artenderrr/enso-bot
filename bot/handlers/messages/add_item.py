@@ -1,6 +1,7 @@
 # mypy: disable-error-code="import-untyped"
 from typing import Any
 import random
+import asyncio
 from pathlib import Path
 from telebot.async_telebot import AsyncTeleBot
 from telebot.types import Message, ReactionTypeEmoji
@@ -107,6 +108,7 @@ def register_add_item_handlers(bot: AsyncTeleBot) -> None:
                 [ReactionTypeEmoji(random.choice(REACTION_EMOJIS))],
                 is_big=False
             )
+            await asyncio.sleep(1)
         
             context = await data["session"].get_context()
             image = await bot.get_file(file_id=msg.photo[-1].file_id)
