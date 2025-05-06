@@ -75,7 +75,7 @@ class ClothingItem:
     @classmethod
     async def all(cls) -> list[ClothingItem]:
         async with get_pg_pool().acquire() as conn:
-            item_rows = await conn.fetch("SELECT * FROM items")
+            item_rows = await conn.fetch("SELECT * FROM items ORDER BY id")
         items_data = [ClothingItem._parse_row_data(row) for row in item_rows]
         return [cls(**item_data) for item_data in items_data]
 
