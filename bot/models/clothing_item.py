@@ -1,9 +1,10 @@
 # mypy: disable-error-code="import-untyped"
 from __future__ import annotations
-from typing import ClassVar, cast
+from typing import Any, ClassVar, cast
 from uuid import uuid4
 from pathlib import Path
 from dataclasses import dataclass
+import asyncpg
 import aiofiles
 from core import get_pg_pool
 
@@ -40,6 +41,12 @@ class ClothingItem:
             )
         return cast(int, item_id)
 
+    @staticmethod
+    def _parse_row_data(row: asyncpg.Record) -> dict[str, Any]:
+        item_data = dict(row)
+        item_data["image_path"] = Path(item_data["image_path"])
+        return item_data
+
     @classmethod
     async def create(
         cls,
@@ -60,10 +67,16 @@ class ClothingItem:
                 "SELECT * FROM items WHERE id = $1", item_id
             )
         if item_row:
-            item_data = dict(item_row)
-            item_data["image_path"] = Path(item_data["image_path"])
+            item_data = ClothingItem._parse_row_data(item_row)
             return cls(**item_data)
         return None
+
+    @classmethod
+    async def all(cls) -> list[ClothingItem]:
+        async with get_pg_pool().acquire() as conn:
+            item_rows = await conn.fetch("SELECT * FROM items")
+        items_data = [ClothingItem._parse_row_data(row) for row in item_rows]
+        return [cls(**item_data) for item_data in items_data]
 
     async def delete(self) -> None:
         async with get_pg_pool().acquire() as conn:
