@@ -3,6 +3,12 @@ import json
 from core import get_redis
 from .clothing_item import ClothingItem
 
+class StateError(Exception):
+    def __init__(self, *, current: str, required: str) -> None:
+        super().__init__(
+            f"Current state is '{current}', should be '{required}'"
+        )
+
 class UserSession:
     def __init__(self, user_id: int) -> None:
         self.user_id = user_id
@@ -55,6 +61,18 @@ class UserSession:
         context = await self.get_context()
         item_data = json.loads(context[f"item_{context['current_item']}"])
         return ClothingItem(**item_data)
+
+    async def decrement_current_view_item(self) -> None:
+        state = await self.get_state()
+        if state != "view_items":
+            raise StateError(current=state, required="view_items")
+        context = await self.get_context()
+        decremented_current_item = context["current_item"] - 1
+        if decremented_current_item < 1:
+            decremented_current_item = context["items_count"]
+        await self.update_context({
+            "current_item": decremented_current_item
+        })
 
     async def clear_session(self) -> None:
         await self.clear_state()
