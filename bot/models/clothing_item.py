@@ -85,6 +85,11 @@ class ClothingItem:
         item_data["image_path"] = str(item_data["image_path"])
         return json.dumps(item_data)
 
+    async def load_image_bytes(self) -> bytes:
+        async with aiofiles.open(self.image_path, "rb") as file:
+            image_bytes = await file.read()
+        return cast(bytes, image_bytes)
+
     async def delete(self) -> None:
         async with get_pg_pool().acquire() as conn:
             await conn.execute(
