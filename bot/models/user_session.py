@@ -1,6 +1,7 @@
 from typing import Any, cast
 import json
 from core import get_redis
+from .clothing_item import ClothingItem
 
 class UserSession:
     def __init__(self, user_id: int) -> None:
@@ -46,6 +47,14 @@ class UserSession:
         await self.redis.delete(
             f"user:{self.user_id}:context"
         )
+
+    async def get_current_view_item(self) -> ClothingItem | None:
+        state = await self.get_state()
+        if state != "view_items":
+            return None
+        context = await self.get_context()
+        item_data = json.loads(context[f"item_{context['current_item']}"])
+        return ClothingItem(**item_data)
 
     async def clear_session(self) -> None:
         await self.clear_state()
