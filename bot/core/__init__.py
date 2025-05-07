@@ -7,8 +7,17 @@ __all__ = ["config", "get_redis", "init_pg", "get_pg_pool"]
 
 def register_custom_filters(bot: AsyncTeleBot) -> None:
     from telebot.asyncio_filters import TextMatchFilter
-    from .custom_filters import AdminFilter, StateFilter
-    custom_filters = (AdminFilter, StateFilter, TextMatchFilter)
+    from .custom_filters import (
+        AdminFilter,
+        StateFilter,
+        CallbackQueryFilter
+    )
+    custom_filters = (
+        AdminFilter,
+        StateFilter,
+        TextMatchFilter,
+        CallbackQueryFilter
+    )
     for custom_filter in custom_filters:
         bot.add_custom_filter(custom_filter())
 

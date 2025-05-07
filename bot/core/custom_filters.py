@@ -1,5 +1,5 @@
 # mypy: disable-error-code="import-untyped"
-from telebot.types import Message
+from telebot.types import Message, CallbackQuery
 from telebot.asyncio_filters import SimpleCustomFilter
 from telebot.asyncio_filters import AdvancedCustomFilter
 from .config import bot_config
@@ -22,3 +22,10 @@ class StateFilter(AdvancedCustomFilter): # type: ignore[misc]
         session = UserSession(user_id)
         state = await session.get_state()
         return state == text
+
+class CallbackQueryFilter(AdvancedCustomFilter): # type: ignore[misc]
+    key = "callback"
+
+    @staticmethod
+    async def check(call: CallbackQuery, text: str) -> bool:
+        return call.data == text
