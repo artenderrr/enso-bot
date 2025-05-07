@@ -1,4 +1,5 @@
-from typing import Any, cast
+from __future__ import annotations
+from typing import Any, Awaitable, Callable, cast
 import json
 from core import get_redis
 from .clothing_item import ClothingItem
@@ -62,10 +63,20 @@ class UserSession:
         item_data = json.loads(context[f"item_{context['current_item']}"])
         return ClothingItem(**item_data)
 
+    @staticmethod
+    def require_state(required_state: str) -> Callable:                 # type: ignore[type-arg]
+        def decorator(func: Callable[..., Awaitable[Any]]) -> Callable: # type: ignore[type-arg]
+            async def wrapper(self: UserSession, *args: Any, **kwargs: Any) -> Any:
+                state = await self.get_state()
+                if state != required_state:
+                    raise StateError(current=state, required=required_state)
+                result = await func(self, *args, **kwargs)
+                return result
+            return wrapper
+        return decorator
+
+    @require_state("view_items")
     async def decrement_current_view_item(self) -> None:
-        state = await self.get_state()
-        if state != "view_items":
-            raise StateError(current=state, required="view_items")
         context = await self.get_context()
         decremented_current_item = context["current_item"] - 1
         if decremented_current_item < 1:
