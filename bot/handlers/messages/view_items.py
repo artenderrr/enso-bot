@@ -2,6 +2,7 @@
 from typing import Any
 from telebot.async_telebot import AsyncTeleBot
 from telebot.types import Message, CallbackQuery
+from telebot.util import content_type_media
 from models import ClothingItem
 from ..replies import VIEW_ITEMS_MSG_FAILURE, get_view_items_msg_success
 from ..utils.markup import get_view_items_markup
@@ -27,7 +28,15 @@ def register_view_items_handlers(bot: AsyncTeleBot) -> None:
                 reply_markup=(get_view_items_markup() if len(items) > 1 else None)
             )
 
-    # TODO: add handler for any content type in view_items state (remind user about /cancel)
+    @bot.message_handler(
+        is_admin=True,
+        state="view_items",
+        content_types=content_type_media,
+        func=lambda msg: True
+    ) # type: ignore[misc]
+    async def handle_view_items_auto_quit(msg: Message, data: dict[Any, Any]) -> None:
+        await data["session"].clear_session()
+        await bot.process_new_messages([msg])
 
     @bot.callback_query_handler(callback=["view_items:backward", "view_items:forward"]) # type: ignore[misc]
     async def handle_view_items_navigation(
