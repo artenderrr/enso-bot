@@ -6,6 +6,7 @@ from telebot.util import content_type_media
 from models import ClothingItem
 from ..replies import VIEW_ITEMS_MSG_FAILURE, get_view_items_msg_success
 from ..utils.markup import get_view_items_markup
+from ..utils.user_session import delete_item_viewer_message
 
 def register_view_items_handlers(bot: AsyncTeleBot) -> None:
     @bot.message_handler(is_admin=True, state="default", text="Список вещей") # type: ignore[misc]
@@ -20,13 +21,16 @@ def register_view_items_handlers(bot: AsyncTeleBot) -> None:
                 await data["session"].set_view_items_context(items)
             current_item = items[0]
             current_item_image = await current_item.load_image_bytes()
-            await bot.send_photo(
+            item_viewer_message = await bot.send_photo(
                 msg.chat.id,
                 current_item_image,
                 get_view_items_msg_success(current_item.__dict__),
                 parse_mode="MarkdownV2",
                 reply_markup=(get_view_items_markup() if len(items) > 1 else None)
             )
+            await data["session"].update_context({
+                "item_viewer_message_id": item_viewer_message.id
+            })
 
     @bot.message_handler(
         is_admin=True,
@@ -35,6 +39,7 @@ def register_view_items_handlers(bot: AsyncTeleBot) -> None:
         func=lambda msg: True
     ) # type: ignore[misc]
     async def handle_view_items_auto_quit(msg: Message, data: dict[Any, Any]) -> None:
+        await delete_item_viewer_message(bot, msg, data)
         await data["session"].clear_session()
         await bot.process_new_messages([msg])
 
