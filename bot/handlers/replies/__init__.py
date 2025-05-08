@@ -20,7 +20,8 @@ from .messages import (
     DEL_ITEM_MSG_START_SUCCESS,
     DEL_ITEM_MSG_ID_FORMAT_FAILURE,
     DEL_ITEM_MSG_ID_LOOKUP_FAILURE,
-    get_del_item_msg_id_success
+    get_del_item_msg_id_success,
+    get_view_items_msg_success
 )
 
 __all__ = [
@@ -42,5 +43,6 @@ __all__ = [
     "DEL_ITEM_MSG_START_SUCCESS",
     "DEL_ITEM_MSG_ID_FORMAT_FAILURE",
     "DEL_ITEM_MSG_ID_LOOKUP_FAILURE",
-    "get_del_item_msg_id_success"
+    "get_del_item_msg_id_success",
+    "get_view_items_msg_success"
 ]

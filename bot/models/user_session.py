@@ -1,7 +1,10 @@
+# mypy: disable-error-code="import-untyped"
 from __future__ import annotations
 from typing import Any, Awaitable, Callable, cast
 import json
+from telebot.types import InputMediaPhoto
 from core import get_redis
+from handlers.replies import get_view_items_msg_success
 from .clothing_item import ClothingItem
 
 class StateError(Exception):
@@ -62,6 +65,15 @@ class UserSession:
         context = await self.get_context()
         item_data = json.loads(context[f"item_{context['current_item']}"])
         return ClothingItem(**item_data)
+
+    async def get_current_view_item_media(self) -> InputMediaPhoto:
+        current_item = await self.get_current_view_item()
+        current_item_image = await current_item.load_image_bytes()
+        return InputMediaPhoto(
+            current_item_image,
+            get_view_items_msg_success(current_item.__dict__),
+            parse_mode="MarkdownV2"
+        )
 
     @staticmethod
     def require_state(required_state: str) -> Callable:                 # type: ignore[type-arg]
