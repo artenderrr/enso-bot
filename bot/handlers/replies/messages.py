@@ -51,6 +51,8 @@ def get_del_item_msg_id_success(item_name: str) -> str:
 
 # view_items replies
 
+VIEW_ITEMS_MSG_FAILURE = "Вещей пока нет\\."
+
 def get_view_items_msg_success(item_data: dict[str, Any]) -> str:
     return (
         f"• ID: *{item_data['id']}*\n"

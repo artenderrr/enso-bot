@@ -6,7 +6,7 @@ from models import UserSession
 
 class UserSessionMiddleware(BaseMiddleware): # type: ignore[misc]
     def __init__(self) -> None:
-        self.update_types = ["message"]
+        self.update_types = ["message", "callback_query"]
 
     async def pre_process(self, msg: Message, data: dict[Any, Any]) -> None:
         user_id = msg.from_user.id
