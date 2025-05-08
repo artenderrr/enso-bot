@@ -1,4 +1,5 @@
 from typing import Any
+from .utils import escape_markdown
 
 # general replies
 
@@ -33,8 +34,8 @@ def get_add_item_msg_image_success(
         "Вещь была успешно добавлена\\!\n"
         "\n"
         f"• ID: *{item_id}*\n"
-        f"• Наименование: *{item_name}*\n"
-        f"• Коллекция: *{item_collection}*\n"
+        f"• Наименование: *{escape_markdown(item_name)}*\n"
+        f"• Коллекция: *{escape_markdown(item_collection)}*\n"
         f"• Тираж: *{item_volume:,} шт\\.*"
     )
 
@@ -46,7 +47,7 @@ DEL_ITEM_MSG_ID_FORMAT_FAILURE = "ID должен быть указан как �
 DEL_ITEM_MSG_ID_LOOKUP_FAILURE = "Вещь с указанным ID не найдена\\. Может, это опечатка?"
 
 def get_del_item_msg_id_success(item_name: str) -> str:
-    return f"Вещь *{item_name}* была успешно удалена\\!"
+    return f"Вещь *{escape_markdown(item_name)}* была успешно удалена\\!"
 
 
 # view_items replies
@@ -56,7 +57,7 @@ VIEW_ITEMS_MSG_FAILURE = "Вещей пока нет\\."
 def get_view_items_msg_success(item_data: dict[str, Any]) -> str:
     return (
         f"• ID: *{item_data['id']}*\n"
-        f"• Наименование: *{item_data['name']}*\n"
-        f"• Коллекция: *{item_data['collection']}*\n"
+        f"• Наименование: *{escape_markdown(item_data['name'])}*\n"
+        f"• Коллекция: *{escape_markdown(item_data['collection'])}*\n"
         f"• Тираж: *{item_data['volume']:,} шт\\.*"
     )
