@@ -27,5 +27,7 @@ class CallbackQueryFilter(AdvancedCustomFilter): # type: ignore[misc]
     key = "callback"
 
     @staticmethod
-    async def check(call: CallbackQuery, text: str) -> bool:
-        return call.data == text
+    async def check(call: CallbackQuery, filter_value: str | list[str]) -> bool:
+        if isinstance(filter_value, list):
+            return any(value == call.data for value in filter_value)
+        return call.data == filter_value
