@@ -85,6 +85,16 @@ class UserSession:
             "current_item": decremented_current_item
         })
 
+    @require_state("view_items")
+    async def increment_current_view_item(self) -> None:
+        context = await self.get_context()
+        incremented_current_item = context["current_item"] + 1
+        if incremented_current_item > context["items_count"]:
+            incremented_current_item = 1
+        await self.update_context({
+            "current_item": incremented_current_item
+        })
+
     async def clear_session(self) -> None:
         await self.clear_state()
         await self.clear_context()
