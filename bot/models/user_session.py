@@ -58,6 +58,13 @@ class UserSession:
             f"user:{self.user_id}:context"
         )
 
+    async def set_view_items_context(self, items: list[ClothingItem]) -> None:
+        await self.update_context({
+            "current_item": 1,
+            **{f"item_{i}": item.json for i, item in enumerate(items, start=1)},
+            "items_count": len(items)
+        })
+
     async def get_current_view_item(self) -> ClothingItem | None:
         state = await self.get_state()
         if state != "view_items":
