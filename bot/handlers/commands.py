@@ -2,8 +2,11 @@
 from typing import Any
 from telebot.async_telebot import AsyncTeleBot
 from telebot.types import Message
-from .utils.markup import get_admin_markup, get_user_markup
-from .utils.user_session import delete_item_viewer_message
+from .utils.markup import (
+    get_admin_markup,
+    get_user_markup,
+    remove_view_items_markup
+)
 from .replies import (
     START_CMD_REPLY,
     CANCEL_CMD_REPLY_FAILURE,
@@ -38,7 +41,9 @@ def register_command_handlers(bot: AsyncTeleBot) -> None:
     async def handle_cancel_command_success_for_admins(
         msg: Message, data: dict[Any, Any]
     ) -> None:
-        await delete_item_viewer_message(bot, msg, data)
+        state = await data["session"].get_state()
+        if state == "view_items":
+            await remove_view_items_markup(bot, msg, data["session"])
         await data["session"].clear_session()
         await bot.reply_to(
             msg,

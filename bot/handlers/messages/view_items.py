@@ -5,8 +5,7 @@ from telebot.types import Message, CallbackQuery
 from telebot.util import content_type_media
 from models import ClothingItem
 from ..replies import VIEW_ITEMS_MSG_FAILURE, get_view_items_msg_success
-from ..utils.markup import get_view_items_markup
-from ..utils.user_session import delete_item_viewer_message
+from ..utils.markup import get_view_items_markup, remove_view_items_markup
 
 def register_view_items_handlers(bot: AsyncTeleBot) -> None:
     @bot.message_handler(is_admin=True, state="default", text="Список вещей") # type: ignore[misc]
@@ -40,7 +39,7 @@ def register_view_items_handlers(bot: AsyncTeleBot) -> None:
         func=lambda msg: True
     ) # type: ignore[misc]
     async def handle_view_items_auto_quit(msg: Message, data: dict[Any, Any]) -> None:
-        await delete_item_viewer_message(bot, msg, data)
+        await remove_view_items_markup(bot, msg, data["session"])
         await data["session"].clear_session()
         await bot.process_new_messages([msg])
 
