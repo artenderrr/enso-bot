@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS items (
     id INT GENERATED ALWAYS AS IDENTITY,
 	name VARCHAR(64) NOT NULL,
 	collection VARCHAR(64) NOT NULL,
-	volume INT NOT NULL,
+	volume INT NOT NULL CHECK(volume > 0),
 	image_path VARCHAR(64) NOT NULL
 );
 """
