@@ -15,12 +15,13 @@ def register_view_items_handlers(bot: AsyncTeleBot) -> None:
         if not items:
             await bot.reply_to(msg, VIEW_ITEMS_MSG_FAILURE, parse_mode="MarkdownV2")
         else:
-            if len(items) > 1:
-                await data["session"].clear_session()
-                await data["session"].set_state("view_items")
-                await data["session"].set_view_items_context(items)
+            await data["session"].clear_session()
+            await data["session"].set_state("view_items")
+            await data["session"].set_view_items_context(items)
+            
             current_item = items[0]
             current_item_image = await current_item.load_image_bytes()
+            
             item_viewer_message = await bot.send_photo(
                 msg.chat.id,
                 current_item_image,
