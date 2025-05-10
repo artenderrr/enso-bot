@@ -61,3 +61,8 @@ def get_view_items_msg_success(item_data: dict[str, Any]) -> str:
         f"• Коллекция: *{escape_markdown(item_data['collection'])}*\n"
         f"• Тираж: *{item_data['volume']:,} шт\\.*"
     )
+
+
+# add_id replies
+
+ADD_ID_MSG_START_SUCCESS = "Введите уникальный номер\\."

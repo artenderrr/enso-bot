@@ -6,7 +6,8 @@ from ..replies import REJECT_MSG
 RESTRICTED_OPERATIONS = [
     "Добавить вещь",
     "Удалить вещь",
-    "Список вещей"
+    "Список вещей",
+    "Добавить номер"
 ]
 
 def register_restricted_operation_handlers(bot: AsyncTeleBot) -> None:
