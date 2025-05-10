@@ -1,50 +1,14 @@
-from .commands import (
-    START_CMD_REPLY,
-    CANCEL_CMD_REPLY_FAILURE,
-    CANCEL_CMD_REPLY_SUCCESS,
-    get_debug_cmd_reply
-)
+from .commands import * # noqa
+from .messages import * # noqa
 
-from .messages import (
-    REJECT_MSG,
-    REACTION_EMOJIS,
-    ADD_ITEM_MSG_START_SUCCESS,
-    ADD_ITEM_MSG_NAME_FAILURE,
-    ADD_ITEM_MSG_NAME_SUCCESS,
-    ADD_ITEM_MSG_COLLECTION_FAILURE,
-    ADD_ITEM_MSG_COLLECTION_SUCCESS,
-    ADD_ITEM_MSG_VOLUME_FAILURE,
-    ADD_ITEM_MSG_VOLUME_SUCCESS,
-    ADD_ITEM_MSG_IMAGE_FAILURE,
-    get_add_item_msg_image_success,
-    DEL_ITEM_MSG_START_SUCCESS,
-    DEL_ITEM_MSG_ID_FORMAT_FAILURE,
-    DEL_ITEM_MSG_ID_LOOKUP_FAILURE,
-    get_del_item_msg_id_success,
-    VIEW_ITEMS_MSG_FAILURE,
-    get_view_items_msg_success
-)
+def get_reply_constants_and_factories() -> list[str]:
+    result = []
+    for name in globals().keys():
+        if (
+            name.isupper() or
+            name.startswith("get_") and name != "get_reply_constants_and_factories"
+        ):
+            result.append(name)
+    return result
 
-__all__ = [
-    "START_CMD_REPLY",
-    "CANCEL_CMD_REPLY_FAILURE",
-    "CANCEL_CMD_REPLY_SUCCESS",
-    "get_debug_cmd_reply",
-    "REJECT_MSG",
-    "REACTION_EMOJIS",
-    "ADD_ITEM_MSG_START_SUCCESS",
-    "ADD_ITEM_MSG_NAME_FAILURE",
-    "ADD_ITEM_MSG_NAME_SUCCESS",
-    "ADD_ITEM_MSG_COLLECTION_FAILURE",
-    "ADD_ITEM_MSG_COLLECTION_SUCCESS",
-    "ADD_ITEM_MSG_VOLUME_FAILURE",
-    "ADD_ITEM_MSG_VOLUME_SUCCESS",
-    "ADD_ITEM_MSG_IMAGE_FAILURE",
-    "get_add_item_msg_image_success",
-    "DEL_ITEM_MSG_START_SUCCESS",
-    "DEL_ITEM_MSG_ID_FORMAT_FAILURE",
-    "DEL_ITEM_MSG_ID_LOOKUP_FAILURE",
-    "get_del_item_msg_id_success",
-    "VIEW_ITEMS_MSG_FAILURE",
-    "get_view_items_msg_success"
-]
+__all__ = get_reply_constants_and_factories()
