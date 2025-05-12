@@ -14,7 +14,19 @@ CREATE TABLE IF NOT EXISTS items (
 	name VARCHAR(64) NOT NULL,
 	collection VARCHAR(64) NOT NULL,
 	volume INT NOT NULL CHECK(volume > 0),
-	image_path VARCHAR(64) NOT NULL
+	image_path VARCHAR(64) NOT NULL,
+	PRIMARY KEY (id)
+);
+
+CREATE TABLE IF NOT EXISTS identifiers (
+    id VARCHAR(5) CHECK(id ~ '^\\d{5}$'),
+    item_id INT NOT NULL,
+    owner VARCHAR(64) NOT NULL,
+    purchase_date VARCHAR(10) CHECK(purchase_date ~ '^\\d{2}\\.\\d{2}\\.\\d{4}$') NOT NULL,
+    owner_note VARCHAR(64),
+    PRIMARY KEY (id),
+    FOREIGN KEY (item_id) REFERENCES items (id)
+        ON DELETE CASCADE
 );
 """
 
