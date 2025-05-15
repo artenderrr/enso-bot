@@ -66,3 +66,10 @@ def get_view_items_msg_success(item_data: dict[str, Any]) -> str:
 # add_id replies
 
 ADD_ID_MSG_START_SUCCESS = "Введите уникальный номер\\."
+ADD_ID_MSG_ID_FORMAT_FAILURE = (
+    "Уникальный номер должен состоять ровно из пяти цифр и не иметь в себе никаких других символов\\."
+)
+ADD_ID_MSG_ID_COLLISION_FAILURE = (
+    "Этот уникальный номер уже занят\\."
+)
+ADD_ID_MSG_ID_SUCCESS = "Введите ID вещи, которую вы хотите привязать к номеру\\."
