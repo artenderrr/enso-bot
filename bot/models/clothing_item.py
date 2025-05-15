@@ -62,6 +62,18 @@ class ClothingItem:
         return cls(item_id, name, collection, volume, image_path)
 
     @classmethod
+    async def exists(cls, id_: int) -> bool:
+        async with get_pg_pool().acquire() as conn:
+            exists = await conn.fetchval(
+                "SELECT EXISTS ("
+                    "SELECT 1 "
+                    "FROM items "
+                    "WHERE id = $1"
+                ")", id_
+            )
+        return cast(bool, exists)
+
+    @classmethod
     async def get(cls, item_id: int) -> ClothingItem | None:
         async with get_pg_pool().acquire() as conn:
             item_row = await conn.fetchrow(
