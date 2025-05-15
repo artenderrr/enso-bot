@@ -3,12 +3,15 @@ from typing import Any
 from telebot.types import Message
 from telebot.async_telebot import AsyncTeleBot
 from telebot.util import content_type_media
-from models import ItemIdentifier
+from models import ItemIdentifier, ClothingItem
 from ..replies import (
     ADD_ID_MSG_START_SUCCESS,
     ADD_ID_MSG_ID_FORMAT_FAILURE,
     ADD_ID_MSG_ID_COLLISION_FAILURE,
-    ADD_ID_MSG_ID_SUCCESS
+    ADD_ID_MSG_ID_SUCCESS,
+    ADD_ID_MSG_ITEM_ID_FORMAT_FAILURE,
+    ADD_ID_MSG_ITEM_ID_EXIST_FAILURE,
+    ADD_ID_MSG_ITEM_ID_SUCCESS
 )
 
 def register_add_id_handlers(bot: AsyncTeleBot) -> None:
@@ -40,3 +43,19 @@ def register_add_id_handlers(bot: AsyncTeleBot) -> None:
             await data["session"].update_context({"id_id": id_})
             await data["session"].set_state("add_id:item_id")
             await bot.send_message(msg.chat.id, ADD_ID_MSG_ID_SUCCESS, parse_mode="MarkdownV2")
+
+    @bot.message_handler(
+        is_admin=True,
+        state="add_id:item_id",
+        content_types=content_type_media,
+        func=lambda msg: True
+    ) # type: ignore[misc]
+    async def handle_add_id_item_id(msg: Message, data: dict[Any, Any]) -> None:
+        if msg.content_type != "text" or not msg.text.isdigit():
+            await bot.reply_to(msg, ADD_ID_MSG_ITEM_ID_FORMAT_FAILURE, parse_mode="MarkdownV2")
+        elif not await ClothingItem.exists(item_id := int(msg.text)):
+            await bot.reply_to(msg, ADD_ID_MSG_ITEM_ID_EXIST_FAILURE, parse_mode="MarkdownV2")
+        else:
+            await data["session"].update_context({"id_item_id": item_id})
+            await data["session"].set_state("add_id:owner")
+            await bot.send_message(msg.chat.id, ADD_ID_MSG_ITEM_ID_SUCCESS, parse_mode="MarkdownV2")
