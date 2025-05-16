@@ -11,7 +11,9 @@ from ..replies import (
     ADD_ID_MSG_ID_SUCCESS,
     ADD_ID_MSG_ITEM_ID_FORMAT_FAILURE,
     ADD_ID_MSG_ITEM_ID_EXIST_FAILURE,
-    ADD_ID_MSG_ITEM_ID_SUCCESS
+    ADD_ID_MSG_ITEM_ID_SUCCESS,
+    ADD_ID_MSG_OWNER_FAILURE,
+    ADD_ID_MSG_OWNER_SUCCESS
 )
 
 def register_add_id_handlers(bot: AsyncTeleBot) -> None:
@@ -59,3 +61,18 @@ def register_add_id_handlers(bot: AsyncTeleBot) -> None:
             await data["session"].update_context({"id_item_id": item_id})
             await data["session"].set_state("add_id:owner")
             await bot.send_message(msg.chat.id, ADD_ID_MSG_ITEM_ID_SUCCESS, parse_mode="MarkdownV2")
+
+    @bot.message_handler(
+        is_admin=True,
+        state="add_id:owner",
+        content_types=content_type_media,
+        func=lambda msg: True
+    ) # type: ignore[misc]
+    async def handle_add_id_owner(msg: Message, data: dict[Any, Any]) -> None:
+        if msg.content_type != "text" or len(msg.text) > 64:
+            await bot.reply_to(msg, ADD_ID_MSG_OWNER_FAILURE, parse_mode="MarkdownV2")
+        else:
+            owner = msg.text
+            await data["session"].update_context({"id_owner": owner})
+            await data["session"].set_state("add_id:purchase_date")
+            await bot.send_message(msg.chat.id, ADD_ID_MSG_OWNER_SUCCESS, parse_mode="MarkdownV2")
