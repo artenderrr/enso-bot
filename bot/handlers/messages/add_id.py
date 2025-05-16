@@ -4,6 +4,7 @@ from telebot.types import Message
 from telebot.async_telebot import AsyncTeleBot
 from telebot.util import content_type_media
 from models import ItemIdentifier, ClothingItem
+from ..utils.date import is_valid_date_format, normalize_date
 from ..replies import (
     ADD_ID_MSG_START_SUCCESS,
     ADD_ID_MSG_ID_FORMAT_FAILURE,
@@ -13,7 +14,9 @@ from ..replies import (
     ADD_ID_MSG_ITEM_ID_EXIST_FAILURE,
     ADD_ID_MSG_ITEM_ID_SUCCESS,
     ADD_ID_MSG_OWNER_FAILURE,
-    ADD_ID_MSG_OWNER_SUCCESS
+    ADD_ID_MSG_OWNER_SUCCESS,
+    ADD_ID_MSG_PURCHASE_DATE_FAILURE,
+    ADD_ID_MSG_PURCHASE_DATE_SUCCESS
 )
 
 def register_add_id_handlers(bot: AsyncTeleBot) -> None:
@@ -76,3 +79,23 @@ def register_add_id_handlers(bot: AsyncTeleBot) -> None:
             await data["session"].update_context({"id_owner": owner})
             await data["session"].set_state("add_id:purchase_date")
             await bot.send_message(msg.chat.id, ADD_ID_MSG_OWNER_SUCCESS, parse_mode="MarkdownV2")
+
+    @bot.message_handler(
+        is_admin=True,
+        state="add_id:purchase_date",
+        content_types=content_type_media,
+        func=lambda msg: True
+    ) # type: ignore[misc]
+    async def handle_add_id_purchase_date(msg: Message, data: dict[Any, Any]) -> None:
+        if (
+            msg.content_type != "text" or
+            not is_valid_date_format(provided_date := msg.text.strip().lower())
+        ):
+            await bot.reply_to(msg, ADD_ID_MSG_PURCHASE_DATE_FAILURE, parse_mode="MarkdownV2")
+        else:
+            purchase_date = normalize_date(provided_date)
+            await data["session"].update_context({"id_purchase_date": purchase_date})
+            await data["session"].set_state("add_id:owner_note")
+            await bot.send_message(
+                msg.chat.id, ADD_ID_MSG_PURCHASE_DATE_SUCCESS, parse_mode="MarkdownV2"
+            )
