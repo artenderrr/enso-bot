@@ -1,6 +1,9 @@
+# mypy: disable-error-code="import-untyped"
 from __future__ import annotations
+from typing import Any
 from typing import cast
 from dataclasses import dataclass
+import asyncpg
 from core import get_pg_pool
 
 @dataclass
@@ -10,6 +13,10 @@ class ItemIdentifier:
     owner: str
     purchase_date: str
     owner_note: str | None
+
+    @staticmethod
+    def _parse_row_data(row: asyncpg.Record) -> dict[str, Any]:
+        return {k: v for k, v in row.items() if k != "added_at"}
 
     @classmethod
     async def exists(cls, id_: str) -> bool:
@@ -41,3 +48,14 @@ class ItemIdentifier:
                 id_, item_id, owner, purchase_date, owner_note
             )
         return cls(id_, item_id, owner, purchase_date, owner_note)
+
+    @classmethod
+    async def get(cls, id_: str) -> ItemIdentifier | None:
+        async with get_pg_pool().acquire() as conn:
+            identifier_row = await conn.fetchrow(
+                "SELECT * FROM identifiers WHERE id = $1", id_
+            )
+        if identifier_row:
+            identifier_data = ItemIdentifier._parse_row_data(identifier_row)
+            return cls(**identifier_data)
+        return None
