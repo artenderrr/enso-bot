@@ -9,6 +9,7 @@ REACTION_EMOJIS = ["\U0001F525", "\U0001F60E"]
 
 # add_item replies
 
+ADD_ID_MSG_START_FAILURE = "Прежде чем добавить номер, внесите в базу хотя бы одну вещь\\."
 ADD_ITEM_MSG_START_SUCCESS = "Введите наименование вещи\\."
 ADD_ITEM_MSG_NAME_FAILURE = (
     "Наименование вещи должно быть указано в виде текстового значения "

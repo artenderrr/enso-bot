@@ -74,6 +74,11 @@ class ClothingItem:
         return cast(bool, exists)
 
     @classmethod
+    async def any_exists(cls) -> bool:
+        all_items = await cls.all()
+        return len(all_items) > 0
+
+    @classmethod
     async def get(cls, item_id: int) -> ClothingItem | None:
         async with get_pg_pool().acquire() as conn:
             item_row = await conn.fetchrow(

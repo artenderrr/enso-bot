@@ -7,6 +7,7 @@ from models import ItemIdentifier, ClothingItem
 from ..utils.markup import get_admin_markup
 from ..utils.date import is_valid_date_format, normalize_date
 from ..replies import (
+    ADD_ID_MSG_START_FAILURE,
     ADD_ID_MSG_START_SUCCESS,
     ADD_ID_MSG_ID_FORMAT_FAILURE,
     ADD_ID_MSG_ID_COLLISION_FAILURE,
@@ -26,11 +27,14 @@ from ..replies import (
 def register_add_id_handlers(bot: AsyncTeleBot) -> None:
     @bot.message_handler(is_admin=True, state="default", text="Добавить номер") # type: ignore[misc]
     async def handle_add_id_start(msg: Message, data: dict[Any, Any]) -> None:
-        await data["session"].clear_session()
-        await data["session"].set_state("add_id:id")
-        await bot.send_message(
-            msg.chat.id, ADD_ID_MSG_START_SUCCESS, parse_mode="MarkdownV2"
-        )
+        if not await ClothingItem.any_exists():
+            await bot.reply_to(msg, ADD_ID_MSG_START_FAILURE, parse_mode="MarkdownV2")
+        else:
+            await data["session"].clear_session()
+            await data["session"].set_state("add_id:id")
+            await bot.send_message(
+                msg.chat.id, ADD_ID_MSG_START_SUCCESS, parse_mode="MarkdownV2"
+            )
 
     @bot.message_handler(
         is_admin=True,
