@@ -24,6 +24,7 @@ CREATE TABLE IF NOT EXISTS identifiers (
     owner VARCHAR(64) NOT NULL,
     purchase_date VARCHAR(10) CHECK(purchase_date ~ '^\\d{2}\\.\\d{2}\\.\\d{4}$') NOT NULL,
     owner_note VARCHAR(64),
+    added_at TIMESTAMP DEFAULT now() NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (item_id) REFERENCES items (id)
         ON DELETE CASCADE
