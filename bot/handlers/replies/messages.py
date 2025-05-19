@@ -91,3 +91,34 @@ ADD_ID_MSG_PURCHASE_DATE_FAILURE = (
 ADD_ID_MSG_PURCHASE_DATE_SUCCESS = (
     "Введите заметку, оставленную владельцем при покупке\\. Если владелец не оставил заметки, отправьте \"\\-\"\\."
 )
+ADD_ID_MSG_OWNER_NOTE_FORMAT_FAILURE = (
+    "Заметка владельца должна быть указана в виде текстового значения длиной не более 64 символов\\."
+)
+ADD_ID_MSG_OWNER_NOTE_COLLISION_FAILURE = (
+    "Ой, кажется, пока вы добавляли этот номер, кто\\-то из админов успел сделать это быстрее\\."
+)
+
+def get_add_id_msg_owner_note_success(
+    id_: str,
+    owner: str,
+    item_name: str,
+    item_collection: str,
+    item_volume: int,
+    purchase_date: str,
+    owner_note: str | None
+) -> str:
+    owner_note_line = f"• Заметка владельца: *{escape_markdown(owner_note)}*\n\n" if owner_note else ""
+    return (
+        "Номер был успешно добавлен\\!\n"
+        "\n"
+        f"Уникальный номер _\\#{id_}_\n"
+        "\n"
+        f"• Владелец вещи: *{escape_markdown(owner)}*\n"
+        f"• Наименование вещи: *{escape_markdown(item_name)}*\n"
+        f"• Коллекция: *{escape_markdown(item_collection)}*\n"
+        f"• Тираж: *{item_volume:,} шт\\.*\n"
+        f"• Дата покупки: *{escape_markdown(purchase_date)}*\n"
+        "\n"
+        f"{owner_note_line}"
+        "Есть ошибка? @ensosupport"
+    )
