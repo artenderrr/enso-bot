@@ -4,6 +4,7 @@ from .utils import escape_markdown
 # general replies
 
 REJECT_MSG = "❌"
+UNAVAILABLE_MSG = "Данная команда все ещё в процессе разработки\\."
 REACTION_EMOJIS = ["\U0001F525", "\U0001F60E"]
 
 
@@ -134,7 +135,7 @@ DEL_ID_MSG_ID_LOOKUP_FAILURE = (
 )
 
 def get_del_id_msg_id_success(id_: str) -> str:
-    return f"Уникальный номер _\\#{id_}_ был успешно удален\\!"
+    return f"Уникальный номер _\\#{id_}_ был успешно удалён\\!"
 
 
 # find_id replies
