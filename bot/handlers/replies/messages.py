@@ -108,7 +108,7 @@ def get_add_id_msg_owner_note_success(
     purchase_date: str,
     owner_note: str | None
 ) -> str:
-    owner_note_line = f"• Заметка владельца: *{escape_markdown(owner_note)}*\n\n" if owner_note else ""
+    owner_note_line = f"\n• Заметка владельца: *{escape_markdown(owner_note)}*" if owner_note else ""
     return (
         "Номер был успешно добавлен\\!\n"
         "\n"
@@ -119,7 +119,41 @@ def get_add_id_msg_owner_note_success(
         f"• Коллекция: *{escape_markdown(item_collection)}*\n"
         f"• Тираж: *{item_volume:,} шт\\.*\n"
         f"• Дата покупки: *{escape_markdown(purchase_date)}*\n"
-        "\n"
         f"{owner_note_line}"
+    )
+
+
+# find_id replies
+
+FIND_ID_MSG_FORMAT_FAILURE = (
+    "Уникальный номер должен состоять ровно из пяти цифр "
+    "и не иметь в себе никаких других символов\\."
+)
+FIND_ID_MSG_EXIST_FAILURE = (
+    "Данные по этому номеру отсутствуют\\.\n"
+    "\n"
+    "Есть ошибка? @ensosupport"
+)
+
+def get_find_id_msg_success(
+    id_: str,
+    owner: str,
+    item_name: str,
+    item_collection: str,
+    item_volume: int,
+    purchase_date: str,
+    owner_note: str | None
+) -> str:
+    owner_note_line = f"\n• Заметка владельца: *{escape_markdown(owner_note)}*\n" if owner_note else ""
+    return (
+        f"Уникальный номер _\\#{id_}_\n"
+        "\n"
+        f"• Владелец вещи: *{escape_markdown(owner)}*\n"
+        f"• Наименование вещи: *{escape_markdown(item_name)}*\n"
+        f"• Коллекция: *{escape_markdown(item_collection)}*\n"
+        f"• Тираж: *{item_volume:,} шт\\.*\n"
+        f"• Дата покупки: *{escape_markdown(purchase_date)}*\n"
+        f"{owner_note_line}"
+        "\n"
         "Есть ошибка? @ensosupport"
     )
