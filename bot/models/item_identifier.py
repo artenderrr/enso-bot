@@ -59,3 +59,9 @@ class ItemIdentifier:
             identifier_data = ItemIdentifier._parse_row_data(identifier_row)
             return cls(**identifier_data)
         return None
+
+    async def delete(self) -> None:
+        async with get_pg_pool().acquire() as conn:
+            await conn.execute(
+                "DELETE FROM identifiers WHERE id = $1", self.id
+            )
