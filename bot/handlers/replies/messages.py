@@ -126,6 +126,15 @@ def get_add_id_msg_owner_note_success(
 # del_id replies
 
 DEL_ID_MSG_START = "Введите уникальный номер, который вы хотите удалить\\."
+DEL_ID_MSG_ID_FORMAT_FAILURE = (
+    "Уникальный номер должен состоять ровно из пяти цифр и не иметь в себе никаких других символов\\."
+)
+DEL_ID_MSG_ID_LOOKUP_FAILURE = (
+    "Этот номер отсутствует в базе\\."
+)
+
+def get_del_id_msg_id_success(id_: str) -> str:
+    return f"Уникальный номер _\\#{id_}_ был успешно удален\\!"
 
 
 # find_id replies
