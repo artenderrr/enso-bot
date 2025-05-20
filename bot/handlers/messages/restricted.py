@@ -8,7 +8,9 @@ RESTRICTED_OPERATIONS = [
     "Удалить вещь",
     "Список вещей",
     "Добавить номер",
-    "Удалить номер"
+    "Удалить номер",
+    "Список номеров",
+    "Список отзывов"
 ]
 
 def register_restricted_operation_handlers(bot: AsyncTeleBot) -> None:
