@@ -123,6 +123,11 @@ def get_add_id_msg_owner_note_success(
     )
 
 
+# del_id replies
+
+DEL_ID_MSG_START = "Введите уникальный номер, который вы хотите удалить\\."
+
+
 # find_id replies
 
 FIND_ID_MSG_FORMAT_FAILURE = (
