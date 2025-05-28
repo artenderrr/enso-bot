@@ -60,6 +60,25 @@ class ItemIdentifier:
             return cls(**identifier_data)
         return None
 
+    @classmethod
+    async def get_many(
+        cls,
+        *,
+        offset: int = 0,
+        limit: int | None = None
+    ) -> list[ItemIdentifier]:
+        async with get_pg_pool().acquire() as conn:
+            rows = await conn.fetch(
+                "SELECT * "
+                "FROM identifiers "
+                "ORDER BY added_at DESC "
+                "OFFSET $1 "
+                f"{'LIMIT $2' if limit is not None else ''}",
+                *filter(lambda x: x is not None, (offset, limit))
+            )
+        identifiers = [cls(**ItemIdentifier._parse_row_data(row)) for row in rows]
+        return identifiers
+
     async def delete(self) -> None:
         async with get_pg_pool().acquire() as conn:
             await conn.execute(
