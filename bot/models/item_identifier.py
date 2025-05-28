@@ -79,6 +79,10 @@ class ItemIdentifier:
         identifiers = [cls(**ItemIdentifier._parse_row_data(row)) for row in rows]
         return identifiers
 
+    @classmethod
+    async def all(cls) -> list[ItemIdentifier]:
+        return await ItemIdentifier.get_many()
+
     async def delete(self) -> None:
         async with get_pg_pool().acquire() as conn:
             await conn.execute(
