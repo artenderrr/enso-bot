@@ -13,6 +13,7 @@ class Config:
         self.bot_token = self._load_env_var("BOT_TOKEN")
         self.admin_user_ids = self._load_admin_user_ids()
         self.db_url = self._load_env_var("DB_URL")
+        self.view_ids_page_size = int(self._load_env_var("VIEW_IDS_PAGE_SIZE"))
 
     def _load_env_var(self, env_var_key: str) -> str:
         env_var_value = os.getenv(env_var_key)

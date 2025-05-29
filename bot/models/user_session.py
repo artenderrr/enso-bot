@@ -3,7 +3,8 @@ from __future__ import annotations
 from typing import Any, Awaitable, Callable, cast
 import json
 from telebot.types import InputMediaPhoto
-from core import get_redis
+from core import get_redis, config
+from models.item_identifier import ItemIdentifier
 from handlers.replies import get_view_items_msg_success
 from .clothing_item import ClothingItem
 
@@ -113,6 +114,16 @@ class UserSession:
         await self.update_context({
             "current_item": incremented_current_item
         })
+
+    @require_state("view_ids")
+    async def get_current_view_ids_page(self) -> list[ItemIdentifier]:        
+        context = await self.get_context()
+        current_page = context["current_view_ids_page"]
+        current_page_identifiers = await ItemIdentifier.get_many(
+            offset=(current_page - 1) * config.view_ids_page_size,
+            limit=config.view_ids_page_size
+        )
+        return current_page_identifiers
 
     async def clear_session(self) -> None:
         await self.clear_state()
