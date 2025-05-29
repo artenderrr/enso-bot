@@ -1,4 +1,5 @@
 from typing import Any
+from models.item_identifier import ItemIdentifier
 from .utils import escape_markdown
 
 # general replies
@@ -171,4 +172,14 @@ def get_find_id_msg_success(
         f"{owner_note_line}"
         "\n"
         "Есть ошибка? @ensosupport"
+    )
+
+
+# view ids replies
+
+VIEW_IDS_MSG_FAILURE = "Номеров пока нет\\."
+
+def get_view_ids_msg_success(identifiers: list[ItemIdentifier]) -> str:
+    return "\n".join(
+        f"_\\#{i.id}_ → *{escape_markdown(i.owner)}*" for i in identifiers
     )

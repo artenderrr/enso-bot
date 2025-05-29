@@ -4,7 +4,6 @@ from telebot.async_telebot import AsyncTeleBot
 from ..replies import UNAVAILABLE_MSG
 
 UNAVAILABLE_OPERATIONS = [
-    "Список номеров",
     "Оставить отзыв",
     "Список отзывов"
 ]
