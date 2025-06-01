@@ -2,8 +2,10 @@
 from typing import Any
 from telebot.types import Message
 from telebot.async_telebot import AsyncTeleBot
+from core import config
 from models import ItemIdentifier
 from ..replies import VIEW_IDS_MSG_FAILURE, get_view_ids_msg_success
+from ..utils.markup import get_view_ids_markup
 
 def register_view_ids_handlers(bot: AsyncTeleBot) -> None:
     @bot.message_handler(is_admin=True, state="default", text="Список номеров") # type: ignore[misc]
@@ -21,5 +23,10 @@ def register_view_ids_handlers(bot: AsyncTeleBot) -> None:
             await bot.send_message(
                 msg.chat.id,
                 get_view_ids_msg_success(current_page_identifiers),
-                parse_mode="MarkdownV2"
+                parse_mode="MarkdownV2",
+                reply_markup=(
+                    get_view_ids_markup()
+                    if len(identifiers) > config.view_ids_page_size
+                    else None
+                )
             )

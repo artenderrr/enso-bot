@@ -44,3 +44,11 @@ async def remove_view_items_markup(
             context["item_viewer_message_id"],
             reply_markup=None
         )
+
+def get_view_ids_markup() -> InlineKeyboardMarkup:
+    markup = InlineKeyboardMarkup(row_width=2)
+    markup.add(
+        InlineKeyboardButton("←", callback_data="view_ids:backward"),
+        InlineKeyboardButton("→", callback_data="view_ids:forward")
+    )
+    return markup
