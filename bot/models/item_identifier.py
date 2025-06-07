@@ -1,7 +1,6 @@
 # mypy: disable-error-code="import-untyped"
 from __future__ import annotations
-from typing import Any
-from typing import cast
+from typing import Any, cast
 from dataclasses import dataclass
 import asyncpg
 from core import get_pg_pool
@@ -82,6 +81,12 @@ class ItemIdentifier:
     @classmethod
     async def all(cls) -> list[ItemIdentifier]:
         return await ItemIdentifier.get_many()
+
+    @classmethod
+    async def count(cls) -> int:
+        async with get_pg_pool().acquire() as conn:
+            count = cast(int, await conn.fetchval("SELECT COUNT(*) FROM identifiers"))
+        return count
 
     async def delete(self) -> None:
         async with get_pg_pool().acquire() as conn:
