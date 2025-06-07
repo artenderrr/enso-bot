@@ -10,8 +10,8 @@ from ..utils.markup import get_view_ids_markup
 def register_view_ids_handlers(bot: AsyncTeleBot) -> None:
     @bot.message_handler(is_admin=True, state="default", text="Список номеров") # type: ignore[misc]
     async def handle_view_ids_start(msg: Message, data: dict[Any, Any]) -> None:
-        identifiers = await ItemIdentifier.all()
-        if not identifiers:
+        identifiers_count = await ItemIdentifier.count()
+        if identifiers_count == 0:
             await bot.reply_to(msg, VIEW_IDS_MSG_FAILURE, parse_mode="MarkdownV2")
         else:
             await data["session"].clear_session()
@@ -26,7 +26,7 @@ def register_view_ids_handlers(bot: AsyncTeleBot) -> None:
                 parse_mode="MarkdownV2",
                 reply_markup=(
                     get_view_ids_markup()
-                    if len(identifiers) > config.view_ids_page_size
+                    if identifiers_count > config.view_ids_page_size
                     else None
                 )
             )
