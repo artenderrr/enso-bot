@@ -2,6 +2,7 @@
 from __future__ import annotations
 from typing import Any, Awaitable, Callable, cast
 import json
+from math import ceil
 from telebot.types import InputMediaPhoto
 from core import get_redis, config
 from models.item_identifier import ItemIdentifier
@@ -124,6 +125,18 @@ class UserSession:
             limit=config.view_ids_page_size
         )
         return current_page_identifiers
+
+    @require_state("view_ids")
+    async def increment_current_view_ids_page(self) -> None:
+        context = await self.get_context()
+        page_count = ceil(await ItemIdentifier.count() / config.view_ids_page_size)
+        current_page = context["current_view_ids_page"]        
+        incremented_current_page = current_page + 1
+        if incremented_current_page > page_count:
+            incremented_current_page = 1
+        await self.update_context({
+            "current_view_ids_page": incremented_current_page
+        })
 
     async def clear_session(self) -> None:
         await self.clear_state()
