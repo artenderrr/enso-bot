@@ -52,3 +52,19 @@ def get_view_ids_markup() -> InlineKeyboardMarkup:
         InlineKeyboardButton("→", callback_data="view_ids:forward")
     )
     return markup
+
+async def remove_view_ids_markup(
+    bot: AsyncTeleBot, message: Message, session: UserSession
+) -> None:
+    from ..replies import get_view_ids_msg_success
+    
+    context = await session.get_context()
+    if context["id_viewer_has_buttons"]:
+        current_page_identifiers = await session.get_current_view_ids_page()
+        await bot.edit_message_text(
+            get_view_ids_msg_success(current_page_identifiers),
+            message.chat.id,
+            context["id_viewer_message_id"],
+            parse_mode="MarkdownV2",
+            reply_markup=None
+        )
