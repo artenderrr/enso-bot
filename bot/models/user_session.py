@@ -127,6 +127,21 @@ class UserSession:
         return current_page_identifiers
 
     @require_state("view_ids")
+    async def decrement_current_view_ids_page(self) -> None:
+        context = await self.get_context()
+        page_count = ceil(await ItemIdentifier.count() / config.view_ids_page_size)
+        current_page = context["current_view_ids_page"]        
+        decremented_current_page = current_page - 1
+        if (
+            decremented_current_page < 1 or
+            decremented_current_page > page_count
+        ):
+            decremented_current_page = page_count
+        await self.update_context({
+            "current_view_ids_page": decremented_current_page
+        })
+
+    @require_state("view_ids")
     async def increment_current_view_ids_page(self) -> None:
         context = await self.get_context()
         page_count = ceil(await ItemIdentifier.count() / config.view_ids_page_size)
