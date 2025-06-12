@@ -1,6 +1,6 @@
 # mypy: disable-error-code="import-untyped"
 from typing import Any
-from telebot.types import Message
+from telebot.types import Message, CallbackQuery
 from telebot.async_telebot import AsyncTeleBot
 from core import config
 from models import ItemIdentifier
@@ -30,3 +30,38 @@ def register_view_ids_handlers(bot: AsyncTeleBot) -> None:
                     else None
                 )
             )
+
+    @bot.callback_query_handler(callback=["view_ids:backward", "view_ids:forward"]) # type: ignore[misc]
+    async def handle_view_ids_navigation(
+        call: CallbackQuery, data: dict[Any, Any]
+    ) -> None:
+        state = await data["session"].get_state()
+        if state == "view_ids":
+            if call.data == "view_ids:backward":
+                await data["session"].decrement_current_view_ids_page()
+            elif call.data == "view_ids:forward":
+                await data["session"].increment_current_view_ids_page()
+                
+            identifiers_count = await ItemIdentifier.count()
+            
+            if identifiers_count == 0:
+                await bot.edit_message_text(
+                    VIEW_IDS_MSG_FAILURE,
+                    call.message.chat.id,
+                    call.message.id,
+                    parse_mode="MarkdownV2"
+                )
+            else:
+                current_page_identifiers = await data["session"].get_current_view_ids_page()
+                await bot.edit_message_text(
+                    get_view_ids_msg_success(current_page_identifiers),
+                    call.message.chat.id,
+                    call.message.id,
+                    parse_mode="MarkdownV2",
+                    reply_markup=(
+                        get_view_ids_markup()
+                        if identifiers_count > config.view_ids_page_size
+                        else None
+                    )
+                )
+        await bot.answer_callback_query(call.id)

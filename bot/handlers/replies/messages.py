@@ -180,6 +180,8 @@ def get_find_id_msg_success(
 VIEW_IDS_MSG_FAILURE = "Номеров пока нет\\."
 
 def get_view_ids_msg_success(identifiers: list[ItemIdentifier]) -> str:
+    if not identifiers:
+        return "На этой странице ничего нет\\."
     return "\n".join(
         f"_\\#{i.id}_ → *{escape_markdown(i.owner)}*" for i in identifiers
     )
