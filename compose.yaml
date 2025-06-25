@@ -1,14 +1,17 @@
 services:
     bot:
         build: .
-        develop:
-            watch:
-                - action: sync+restart
-                  path: .
-                  target: /enso-bot
+        volumes:
+            - enso-images:/enso-bot/images
     db:
         build: ./db
         environment:
             - POSTGRES_PASSWORD=postgres
+        volumes:
+            - enso-db:/var/lib/postgresql/data
     redis:
         image: redis:7.4
+
+volumes:
+    enso-images:
+    enso-db:
