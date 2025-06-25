@@ -3,10 +3,7 @@ from telebot.types import Message
 from telebot.async_telebot import AsyncTeleBot
 from ..replies import UNAVAILABLE_MSG
 
-UNAVAILABLE_OPERATIONS = [
-    "Оставить отзыв",
-    "Список отзывов"
-]
+UNAVAILABLE_OPERATIONS: list[str] = []
 
 def register_unavailable_operation_handlers(bot: AsyncTeleBot) -> None:
     @bot.message_handler(state="default", text=UNAVAILABLE_OPERATIONS) # type: ignore[misc]

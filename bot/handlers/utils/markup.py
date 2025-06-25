@@ -13,15 +13,15 @@ def get_admin_markup() -> ReplyKeyboardMarkup:
     for row in [
         create_markup_row("Добавить вещь", "Добавить номер"),
         create_markup_row("Удалить вещь", "Удалить номер"),
-        create_markup_row("Список вещей", "Список номеров"),
-        create_markup_row("Список отзывов")
+        create_markup_row("Список вещей", "Список номеров")
     ]:
         markup.row(*row)
     return markup
 
 def get_user_markup() -> ReplyKeyboardMarkup:
     markup = ReplyKeyboardMarkup(resize_keyboard=True)
-    markup.add(KeyboardButton("Оставить отзыв"))
+    # User buttons can be added like that:
+    # markup.add(KeyboardButton("Какая-то кнопка"))
     return markup
 
 def get_view_items_markup() -> InlineKeyboardMarkup:
